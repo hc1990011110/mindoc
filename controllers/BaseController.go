@@ -3,7 +3,6 @@ package controllers
 import (
 	"bytes"
 	"encoding/json"
-	"io"
 	"strings"
 	"time"
 
@@ -119,7 +118,7 @@ func (c *BaseController) JsonResult(errCode int, errMsg string, data ...interfac
 
 	c.Ctx.ResponseWriter.Header().Set("Content-Type", "application/json; charset=utf-8")
 	c.Ctx.ResponseWriter.Header().Set("Cache-Control", "no-cache, no-store")
-	_, err = io.WriteString(c.Ctx.ResponseWriter, string(returnJSON))
+	_, err = c.Ctx.ResponseWriter.Write(returnJSON)
 	if err != nil {
 		logs.Error(err)
 	}
@@ -145,7 +144,7 @@ func (c *BaseController) CheckJsonError(code int, err error) {
 
 	c.Ctx.ResponseWriter.Header().Set("Content-Type", "application/json; charset=utf-8")
 	c.Ctx.ResponseWriter.Header().Set("Cache-Control", "no-cache, no-store")
-	_, err = io.WriteString(c.Ctx.ResponseWriter, string(returnJSON))
+	_, err = c.Ctx.ResponseWriter.Write(returnJSON)
 	if err != nil {
 		logs.Error(err)
 	}
@@ -173,9 +172,7 @@ func (c *BaseController) ExecuteViewPathTemplate(tplName string, data interface{
 func (c *BaseController) BaseUrl() string {
 	baseUrl := web.AppConfig.DefaultString("baseurl", "")
 	if baseUrl != "" {
-		if strings.HasSuffix(baseUrl, "/") {
-			baseUrl = strings.TrimSuffix(baseUrl, "/")
-		}
+		baseUrl = strings.TrimSuffix(baseUrl, "/")
 	} else {
 		baseUrl = c.Ctx.Input.Scheme() + "://" + c.Ctx.Request.Host
 	}

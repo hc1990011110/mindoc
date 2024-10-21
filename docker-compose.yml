@@ -1,7 +1,7 @@
-version: "3"
 services:
   mindoc:
-    image: registry.cn-hangzhou.aliyuncs.com/mindoc-org/mindoc:v2.1
+    build:
+      context: .            # 使用当前目录作为构建上下文
     container_name: mindoc
     privileged: false
     restart: always
@@ -16,8 +16,11 @@ services:
       - /var/www/mindoc/database://mindoc/database
     environment:
       - MINDOC_RUN_MODE=prod
-      - MINDOC_DB_ADAPTER=sqlite3
-      - MINDOC_DB_DATABASE=./database/mindoc.db
+      - MINDOC_DB_ADAPTER=mysql           # 使用 MySQL 数据库
+      - MINDOC_DB_HOST=mysql              # 使用服务名称 mysql 来连接数据库
+      - MINDOC_DB_DATABASE=mindoc         # 数据库名称
+      - MINDOC_DB_USERNAME=root           # MySQL 用户名
+      - MINDOC_DB_PASSWORD=123456         # MySQL 密码
       - MINDOC_CACHE=true
       - MINDOC_CACHE_PROVIDER=file
       - MINDOC_ENABLE_EXPORT=false
@@ -25,6 +28,14 @@ services:
       - MINDOC_CDN_IMG_URL=
       - MINDOC_CDN_CSS_URL=
       - MINDOC_CDN_JS_URL=
-    dns:
-      - 223.5.5.5
-      - 223.6.6.6
+  mysql:
+    image: mysql:5.7
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456  # MySQL root 用户密码
+      MYSQL_DATABASE: mindoc              # 初始数据库名称
+    ports:
+      - "3306:3306"                       # 将 MySQL 3306 端口暴露到主机
+    volumes:
+      - ./mysql-data:/var/lib/mysql       # 持久化 MySQL 数据
+      - ./mysql-conf/my.cnf:/etc/mysql/conf.d/my.cnf # 挂载自定义的 my.cnf

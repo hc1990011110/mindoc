@@ -59,7 +59,7 @@ func RegisterDataBase() {
 		dataSource := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=true&loc=%s", username, password, host, port, database, url.QueryEscape(timezone))
 
 		if err := orm.RegisterDataBase("default", "mysql", dataSource); err != nil {
-			logs.Error("注册默认数据库失败->", err)
+			logs.Error("注册默认数据库失败-> %s ", dataSource, err)
 			os.Exit(1)
 		}
 

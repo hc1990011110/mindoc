@@ -8,12 +8,12 @@ services:
     ports:
       - 8181:8181
     volumes:
-      - /var/www/mindoc/conf://mindoc/conf
-      - /var/www/mindoc/static://mindoc/static
-      - /var/www/mindoc/views://mindoc/views
-      - /var/www/mindoc/uploads://mindoc/uploads
-      - /var/www/mindoc/runtime://mindoc/runtime
-      - /var/www/mindoc/database://mindoc/database
+      - ./data/conf://mindoc/conf
+      - ./data/static://mindoc/static
+      - ./data/views://mindoc/views
+      - ./data/uploads://mindoc/uploads
+      - ./data/runtime://mindoc/runtime
+      - ./data/database://mindoc/database
     environment:
       - MINDOC_RUN_MODE=prod
       - MINDOC_DB_ADAPTER=mysql           # 使用 MySQL 数据库
@@ -37,5 +37,5 @@ services:
     ports:
       - "3306:3306"                       # 将 MySQL 3306 端口暴露到主机
     volumes:
-      - ./mysql-data:/var/lib/mysql       # 持久化 MySQL 数据
+      - ./data/mysql:/var/lib/mysql       # 持久化 MySQL 数据
       - ./mysql-conf/my.cnf:/etc/mysql/conf.d/my.cnf # 挂载自定义的 my.cnf

@@ -494,7 +494,7 @@ func (c *DocumentController) Upload() {
 		if err != nil {
 			continue
 		}
-		if len(file) > 0 && err == nil {
+		if len(file) > 0 {
 			files = append(files, file...)
 		}
 	}
@@ -506,7 +506,7 @@ func (c *DocumentController) Upload() {
 
 	result2 := []map[string]interface{}{}
 	var result map[string]interface{}
-	for i, _ := range files {
+	for i := range files {
 		//for each fileheader, get a handle to the actual file
 		file, err := files[i].Open()
 

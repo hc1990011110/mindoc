@@ -34,4 +34,4 @@ database/mindoc.db
 /runtime
 /uploads/*.*
 !/uploads/.gitkeep
-/mysql-data
+/data
